@@ -1,10 +1,10 @@
 '''
 
 == Integrantes ==
-    Igor Blacconaro Santos - RM572033
-    Andrew Rodrigues Lima da Silva - RM573777
-    Bryan Costa Silva - RM569439
-    Luis Henrique Rondão Mendonça - RM569797
+    Igor Blacconaro Santos 
+    Andrew Rodrigues Lima da Silva 
+    Bryan Costa Silva 
+    Luis Henrique Rondão Mendonça 
 
 == Proposta do jogo ==
     O Projeto foi baseado em um jogo de tabuleiro chamado "bloqueio", a ideia do jogo consiste em que cada jogador chegue ao lado do inimigo. Contudo cada jogador possuira 5 barreiras e o usuário deve escolher entre se mover ou atrapalhar a locomoção do rival de forma estratégica!
@@ -13,7 +13,7 @@
 
 def criarMatriz(tamanho: int):
     '''
-    Cria o tabuleiro do jogo com base em um tamnho que é passado por parãmetro, utilizando "." para sinalizar as posições que estarão disponíveis.
+    Cria o tabuleiro do jogo com base em um tamnho que é passado por parâmetro, utilizando "." para sinalizar as posições que estarão disponíveis.
     '''
     tabuleiro = []
 
@@ -115,7 +115,7 @@ def movimentarJogador(tabuleiro: list, jogadores: dict, jogador: str, direcao: i
     Realiza a movimentação do jogador com base na direção recebida.
         - obtem a posição nova da jogada utilizando a função "obterNovaPosicao".
         - valida a posição disponível com função "validarMovimento".
-        - atualiza o tabuleiro, com a nova posição e transformando a anitga em uma posição vazia.
+        - atualiza o tabuleiro, com a nova posição e transformando a antiga em uma posição vazia.
     '''
 
     linha = jogadores[jogador]["linha"]
@@ -185,7 +185,7 @@ def colocarBarreira(tabuleiro: list, jogadores: dict, jogador: str):
     if jogadores[jogador]["barreiras"] == 0:
         print("\nVocê não possui mais barreiras!")
         return False
-    #escolha da linha e coluna da barreira
+
     while True:
         try:
             linha = int(input("\nInforme o número da linha para adicionar a barreira: ")) - 1
@@ -202,7 +202,6 @@ def colocarBarreira(tabuleiro: list, jogadores: dict, jogador: str):
         else:
             break
 
-    #escolha da orienação da barreira
     print("\n1- Horizontal")        
     print("2- Vertical")
     while True:
@@ -220,20 +219,16 @@ def colocarBarreira(tabuleiro: list, jogadores: dict, jogador: str):
             break
 
     if orientacao == 1:
-        #Horizontal
         segunda_linha = linha
         segunda_coluna = coluna + 1
     else:
-        #Vertical
         segunda_linha = linha + 1
         segunda_coluna = coluna
 
-    #verifica se a segunda posição esta dentro do tabuleiro 
     if segunda_linha >= tamanho or segunda_coluna >= tamanho:
         print("\nA barreira ultrapassa o limite do tabuleiro!")
         return False
     
-    # Verifica se as duas posições estão livres
     if tabuleiro[linha][coluna] != ".":
         print("\nA primeira posição já está ocupada!")
         return False
@@ -241,7 +236,6 @@ def colocarBarreira(tabuleiro: list, jogadores: dict, jogador: str):
         print("\nA segunda posição já está ocupada!")
         return False
 
-    #colocar a barreira
     tabuleiro[linha][coluna] = "#" 
     tabuleiro[segunda_linha][segunda_coluna] = "#"
 
@@ -260,7 +254,6 @@ def colocarBarreira(tabuleiro: list, jogadores: dict, jogador: str):
     )
 
     if not caminho_a or not caminho_b:
-        # Remove a barreira
         tabuleiro[linha][coluna] = "."
         tabuleiro[segunda_linha][segunda_coluna] = "."
 
@@ -278,35 +271,30 @@ def existeCaminho(tabuleiro: list, inicio_linha: int, inicio_coluna: int, jogado
     '''
     tamanho = len(tabuleiro)
 
-    # Lista de posições que ainda precisam ser verificadas
     fila = [(inicio_linha, inicio_coluna)]
 
-    # Guarda as posições que já foram verificadas
     visitados = []
 
     while len(fila) > 0:
 
         linha, coluna = fila.pop(0)
 
-        # Evita verificar a mesma posição novamente
         if (linha, coluna) in visitados:
             continue
 
         visitados.append((linha, coluna))
 
-        # Verifica se o jogador chegou ao objetivo
         if jogador == "A" and coluna == tamanho - 1:
             return True
 
         if jogador == "B" and coluna == 0:
             return True
 
-        # Possíveis movimentos: cima, baixo, esquerda e direita
         movimentos = [
-            (-1, 0),  # cima
-            (1, 0),   # baixo
-            (0, -1),  # esquerda
-            (0, 1)    # direita
+            (-1, 0),  
+            (1, 0),   
+            (0, -1),  
+            (0, 1)    
         ]
 
         for movimento in movimentos:
@@ -314,19 +302,15 @@ def existeCaminho(tabuleiro: list, inicio_linha: int, inicio_coluna: int, jogado
             nova_linha = linha + movimento[0]
             nova_coluna = coluna + movimento[1]
 
-            # Verifica se está dentro do tabuleiro
             if (nova_linha >= 0 and nova_linha < tamanho and
                     nova_coluna >= 0 and nova_coluna < tamanho):
 
-                # Pode passar somente por casas vazias ou pela posição do jogador
                 if (tabuleiro[nova_linha][nova_coluna] == "." or
                         tabuleiro[nova_linha][nova_coluna] == jogador):
 
                     if (nova_linha, nova_coluna) not in visitados:
                         fila.append((nova_linha, nova_coluna))
 
-    # Se todas as possibilidades foram verificadas
-    # e o objetivo não foi encontrado
     return False
 
 
